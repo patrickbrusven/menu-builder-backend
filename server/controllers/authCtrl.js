@@ -1,4 +1,6 @@
 const User = require('../models/userModel.js');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 function asyncHandler(cb){
   return async (req, res, next)=>{
@@ -28,6 +30,19 @@ module.exports = {
     res.status(201).header('auth-token', user.token).json(user);
   }),
 
+  // loginUser: asyncHandler( async(req, res, next) => {
+  //   const user = await User.findOne({ email: req.body.email });
+  //   if(!user) return res.status(400).send("Email dosen't exist");
+  //
+  //   const clientPassword = req.body.password;
+  //   if (user.password != clientPassword) {
+  //     return res.status(400).send('Invalid password')
+  //   }
+  //   user.token = 'thisIsAToken';
+  //   await user.save();
+  //   res.status(200).header('auth-token', user.token).json(user);
+  // }),
+
   loginUser: asyncHandler( async(req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if(!user) return res.status(400).send("Email dosen't exist");
@@ -36,7 +51,9 @@ module.exports = {
     if (user.password != clientPassword) {
       return res.status(400).send('Invalid password')
     }
-    user.token = 'thisIsAToken';
+
+    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
+    user.token = token;
     await user.save();
     res.status(200).header('auth-token', user.token).json(user);
   }),
