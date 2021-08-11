@@ -7,17 +7,17 @@ router.route('/')
   .get(MenuController.index);
 
 router.route('/:menuId')
-  .get(verify, MenuController.getMenu)
-  .patch(MenuController.updateMenu)
-  .delete(MenuController.removeMenu);
+  .get(MenuController.getMenu)
+  .patch(verify, MenuController.updateMenu)
+  .delete(verify, MenuController.removeMenu)
 
 router.route('/:menuId/menuitems')
   .get(MenuController.getMenuItems)
-  .post(MenuController.newMenuItem);
+  .post(verify, MenuController.newMenuItem)
 
 router.route('/:menuId/:menuItemId')
   .get(MenuController.getMenuItem)
-  .patch(MenuController.updateMenuItem)
-  .delete(MenuController.removeMenuItem);
+  .patch(verify, MenuController.updateMenuItem)
+  .delete(verify, MenuController.removeMenuItem)
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require('../models/userModel.js');
+const { registerValidation, loginValidation } = require('../validation.js');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
@@ -22,6 +23,9 @@ module.exports = {
 
   registerUser: asyncHandler( async(req, res, next) => {
 
+    const { error } = registerValidation(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already exists');
 
@@ -41,6 +45,10 @@ module.exports = {
   }),
 
   loginUser: asyncHandler( async(req, res, next) => {
+    
+    const { error } = loginValidation(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+
     const user = await User.findOne({ email: req.body.email });
     if(!user) return res.status(400).send("Email dosen't exist");
 

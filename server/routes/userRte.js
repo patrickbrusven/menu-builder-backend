@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userCtrl.js');
+const verify = require('../verifyToken.js');
 
 router.route('/')
   .get(UserController.index)
-  .post(UserController.newUser);
+  .post(UserController.newUser)
 
 router.route('/:userId')
   .get(UserController.getUser)
-  .put(UserController.replaceUser)
-  .patch(UserController.updateUser)
-  .delete(UserController.deleteUser);
+  .put(verify, UserController.replaceUser)
+  .patch(verify, UserController.updateUser)
+  .delete(verify, UserController.deleteUser)
 
 router.route('/:userId/menus')
   .get(UserController.getUsersMenus)
-  .post(UserController.newUsersMenu);
+  .post(verify, UserController.newUsersMenu)
 
 module.exports = router;

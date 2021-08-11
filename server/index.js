@@ -1,12 +1,10 @@
 const express = require('express');
-// const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 const uri = process.env.DB_CONNECTION;
 
-// connect to db
 mongoose.connect(uri, {
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -26,12 +24,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-// routes old
-// const menu = require('./routes/menuAPI.js');
-// const authRoute = require('./routes/Authorization.js');
-// app.use('/api/menu', menu);
-// app.use('/api/user', authRoute);
-
 // routes
 const menusRoute = require('./routes/menuRte.js');
 const usersRoute = require('./routes/userRte.js');
@@ -48,7 +40,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const port = process.env.PORT || 5000;
-
 
 // Error handling middle ware
 app.use((req, res, next) => {

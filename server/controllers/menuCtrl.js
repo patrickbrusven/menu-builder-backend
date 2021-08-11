@@ -1,7 +1,6 @@
 const User = require('../models/userModel.js');
 const Menu = require('../models/menuModel.js');
 const MenuItem = require('../models/menuItemModel.js');
-// const verify = require('../verifyToken');
 
 function asyncHandler(cb){
   return async (req, res, next)=>{
