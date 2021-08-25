@@ -15,11 +15,6 @@ function asyncHandler(cb){
 }
 
 module.exports = {
-  getUserByToken: asyncHandler ( async(req, res, next) => {
-    const { tokenId } = req.params;
-    const user = await User.findOne({token: tokenId});
-    res.status(200).json(user);
-  }),
 
   registerUser: asyncHandler( async(req, res, next) => {
 
@@ -39,13 +34,13 @@ module.exports = {
     });
 
     const token = await jwt.sign({_id: newUser._id}, process.env.TOKEN_SECRET)
-    newUser.token = token;
+    // newUser.token = token;
     const user = await newUser.save()
-    res.status(201).header('auth-token', user.token).json(user);
+    res.status(201).header('auth-token', token).json(user);
   }),
 
   loginUser: asyncHandler( async(req, res, next) => {
-    
+
     const { error } = loginValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -58,8 +53,8 @@ module.exports = {
     }
 
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
-    user.token = token;
+    // user.token = token;
     await user.save();
-    res.status(200).header('auth-token', user.token).json(user);
+    res.status(200).header('auth-token', token).json(user);
   }),
 }
